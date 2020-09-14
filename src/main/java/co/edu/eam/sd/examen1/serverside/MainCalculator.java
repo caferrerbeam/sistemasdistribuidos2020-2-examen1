@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class MainCalculator {
 
   public static double[] getRandomNumbers() {
-    double nums[] = new double[100];
+    double nums[] = new double[10000];
     for (int i = 0; i < nums.length; i++) {
       nums[i] = i;
     }

@@ -4,7 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 //TODO: la solicitudes de conexion de esta clase se deben implementar en un hilo y el procesamiento
-//   de esas solicitudes se debe hacer concurrentemente usando el pool de hilos.
+//   de esas solicitudes se debe hacer concurrentemente usando el pool de hilos. CalculateRequest
 public class CalculatorNode {
 
   public static int SERVER_PORT = 50000;

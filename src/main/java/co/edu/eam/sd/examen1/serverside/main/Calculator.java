@@ -19,7 +19,7 @@ public class Calculator {
   private Map<String, Map<String, String>> nodesConfigurations = new HashMap<>();
 
   //TODO: crear el pool de hilos. 100 hilos maximo
-  private ExecutorService pool = Executors.newFixedThreadPool(100);
+  private ExecutorService pool = null;
 
   public double process(double[] numbers, String command) throws Exception {
     int blockCount = numbers.length / BLOCK_SIZE;
@@ -83,6 +83,6 @@ public class Calculator {
   //  5. recibir myname de nodo
   //  6. desconectarse
   //  7. invocar metodo registerWorkerNode(String ip, int port, String nodeName)
-
+  // EL METODO DEL HILOOOOOOOOOOO
 
 }
