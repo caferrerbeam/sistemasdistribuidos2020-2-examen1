@@ -18,13 +18,11 @@ public class MainCalculator {
   public static void main(String[] args) throws Exception {
     Calculator calculator = new Calculator();
 
-    //TODO start the calculator Thread
     new Thread(calculator).start();
     CalculatorNode node1 = new CalculatorNode(45001, "node1", "localhost", 50000);
     CalculatorNode node2 = new CalculatorNode(45002, "node2", "localhost", 50000);
     CalculatorNode node3 = new CalculatorNode(45003, "node3", "localhost", 50000);
 
-    //TODO: crear los tres hilos para que los nodos de calculo corran...
     new Thread(node1).start();
     new Thread(node2).start();
     new Thread(node3).start();

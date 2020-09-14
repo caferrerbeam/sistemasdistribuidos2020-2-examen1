@@ -36,10 +36,11 @@ public class CalculatorRequester {
   //  0. conectarse al nodo worker con la ip y el puerto que llega por parametro
   //  1. enviar el comando
   //  2. evniar el payload: los numeros separados por comas.
-  //  3. recibir la respuesta
+  //  3. recibir la respuesta (resutlado del calculo)
+  //  4. retornar dicho resultado
   private double sendCommandToWorker(String ip, int port, String command, String payload) throws IOException {
     return 0;
   }
-  //TODO implementar metodo concurrente
+  //TODO implementar metodo concurrente cuyo trabajo es invocar a execute solamente.
 
 }

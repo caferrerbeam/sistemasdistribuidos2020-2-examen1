@@ -56,7 +56,7 @@ public class CalculateRequest {
     //TODO: obtener todos los resultados futuros y llenar el arreglo de nums con esos resultados.
     // tip: el Future retorna Double, se puede obtener el valor primitivo con .doubleValue()
     for (Future<Double> future : results) {
-      nums[i] = 0;// TODO obtener futuro
+      nums[i] = 0;// TODO obtener futuro y almacenar el resultado aca...
       System.out.println("result " + command + "=" + nums[i]);
       i++;
     }

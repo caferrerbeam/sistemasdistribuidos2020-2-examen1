@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
 //TODO: clase que esperara las solicitudes de conexion de los nodos de calculo
 // las solicitudes se esperan concurrentemente pero no se procesan concurrentemente
 public class Calculator {
-  public static final int BLOCK_SIZE = 10;
+  public static final int BLOCK_SIZE = 1000;
   public static int PORT = 50000;
 
   private Map<String, Map<String, String>> nodesConfigurations = new HashMap<>();
@@ -83,4 +83,6 @@ public class Calculator {
   //  5. recibir myname de nodo
   //  6. desconectarse
   //  7. invocar metodo registerWorkerNode(String ip, int port, String nodeName)
+
+
 }

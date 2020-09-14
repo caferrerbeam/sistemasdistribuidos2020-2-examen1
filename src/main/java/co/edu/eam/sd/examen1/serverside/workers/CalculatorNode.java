@@ -11,20 +11,20 @@ public class CalculatorNode {
   public static int POOL_SIZE = 100;
 
   //TODO: crear el pool de conexiones cuyo tamano sera POOL_SIZE
-  private ExecutorService pool = Executors.newFixedThreadPool(POOL_SIZE);
+  private ExecutorService pool = null;
 
   private int myPort;
   private String myName;
-  private String ipServer;
-  private int portServer;
+  private String ipMaster;
+  private int portMaster;
 
-  public CalculatorNode(int myPort, String myName, String ipServer, int portServer) throws Exception {
+  public CalculatorNode(int myPort, String myName, String ipMaster, int portMaster) throws Exception {
     this.myPort = myPort;
     this.myName = myName;
-    this.ipServer = ipServer;
-    this.portServer = portServer;
+    this.ipMaster = ipMaster;
+    this.portMaster = portMaster;
 
-    notifyToCentralServer(ipServer, portServer, myName, myPort);
+    notifyToCentralServer(ipMaster, portMaster, myName, myPort);
   }
 
   //TODO: implementar la recepcion de la solicitud de calculo
@@ -33,13 +33,13 @@ public class CalculatorNode {
 
   //TODO: avisar al servidor central la presencia de este nodo.
   //  implementar el protocolo de notificacion al servidor.
-  //  1. conectarse al servidor
+  //  1. conectarse al master
   //  2. enviarle la cadena: acceptme
   //  3. enviar mi ip
   //  4. enviar mi puerto
   //  5. enviar myname
   //  6. desconectarse
-  public void notifyToCentralServer(String ipServer, int portServer, String myName, int myPort) throws Exception {
-
+  public void notifyToCentralServer(String ipMaster, int portMaster, String myName, int myPort) throws Exception {
+    String miIp = "localhost"; //por el momento....
   }
 }

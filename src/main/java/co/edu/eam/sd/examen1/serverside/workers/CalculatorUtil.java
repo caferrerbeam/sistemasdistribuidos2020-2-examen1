@@ -3,8 +3,8 @@ package co.edu.eam.sd.examen1.serverside.workers;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
-// TODO: convertir esta clase en Callable e invocar concurrente el metodo execute
-public class CalculatorUtil implements Callable<Double> {
+// TODO: convertir esta clase en un hilo que retorna resultados
+public class CalculatorUtil {
 
   private String command;
   private double numbers[];
@@ -39,10 +39,5 @@ public class CalculatorUtil implements Callable<Double> {
       case "min": return min(numbers);
     }
     throw new RuntimeException("Operation not implemented");
-  }
-
-  @Override
-  public Double call() throws Exception {
-    return execute();
   }
 }
