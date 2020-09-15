@@ -10,7 +10,7 @@ import java.util.concurrent.Future;
 
 //TODO: esta clase debe ser un hilo que reciba la peticion de calculo del servidor.
 // e invoque el metodo executeCommand que recibe la orden y los parametros para ejecutarlos.
-public class CalculateRequest {
+public class CalculateRequest implements Runnable{
 
   public static final int BLOCK_SIZE = 2;
 
@@ -45,9 +45,9 @@ public class CalculateRequest {
     for (int i = 0; i < blockCount; i++) {
       double block[] = Utils.getBlock(numbers, i, BLOCK_SIZE);
       CalculatorUtil calculatorUtil = new CalculatorUtil(command, block);
-
+    
       //TODO: agregar al pool la instancia del calculador y agregar el futuro al arreglo de futuros.
-
+        results.add((Future<Double>) calculatorUtil);
     }
 
     double nums[] = new double[results.size()];
@@ -71,4 +71,9 @@ public class CalculateRequest {
   //  2. recibir el payload: los numeros separados por comas.
   //  3. invocar el metodo de calculo executeCommand(command, payload)
   //  4. enviar el resultado por la salida de la conexion
+
+    @Override
+    public void run() {
+        executeCommand(command, payload);
+    }
 }

@@ -22,18 +22,21 @@ public class Calculator {
   private ExecutorService pool = null;
 
   public double process(double[] numbers, String command) throws Exception {
+      pool = Executors.newFixedThreadPool(100);
     int blockCount = numbers.length / BLOCK_SIZE;
     int remaining = numbers.length % BLOCK_SIZE;
     blockCount = remaining > 0 ? blockCount + 1 : blockCount;
-
+    CalculatorRequester calculatorRequester;
     //Lista donde quedaran los resultados futuros.
     //TODO: crear la lista donde quedaran todos los resultados futuros.
     List<Future<Double>> resultsNodes = new ArrayList<>();
 
     for (int i = 0; i < blockCount; i++) {
       double block[] = Utils.getBlock(numbers, i, BLOCK_SIZE);
-      CalculatorRequester calculatorRequester = new CalculatorRequester(block, getNode(), command);
+       calculatorRequester = new CalculatorRequester(block, getNode(), command);
       //TODO: agendar el procesamiento del bloque y agregar al arreglo de futuros
+      resultsNodes.add((Future<Double>) calculatorRequester);
+      pool.execute(calculatorRequester);
 
     }
 
@@ -43,6 +46,7 @@ public class Calculator {
     //TODO: obtener todos los resultados futuros y llenar el arreglo de nums con esos resultados.
     // tip: el Future retorna Double, se puede obtener el valor primitivo con .doubleValue()
     for (Future<Double> future : resultsNodes) {
+       
       nums[i++] = 0;// TODO: obtener futuro...
     }
 

@@ -1,5 +1,7 @@
 package co.edu.eam.sd.examen1.serverside.workers;
 
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -11,7 +13,7 @@ public class CalculatorNode {
   public static int POOL_SIZE = 100;
 
   //TODO: crear el pool de conexiones cuyo tamano sera POOL_SIZE
-  private ExecutorService pool = null;
+  private ExecutorService pool;
 
   private int myPort;
   private String myName;
@@ -29,7 +31,7 @@ public class CalculatorNode {
 
   //TODO: implementar la recepcion de la solicitud de calculo
   // instanciando CalculateRequest y enviandole por parametro el socket y el pool
-
+  
 
   //TODO: avisar al servidor central la presencia de este nodo.
   //  implementar el protocolo de notificacion al servidor.
@@ -41,5 +43,20 @@ public class CalculatorNode {
   //  6. desconectarse
   public void notifyToCentralServer(String ipMaster, int portMaster, String myName, int myPort) throws Exception {
     String miIp = "localhost"; //por el momento....
+     ServerSocket server = new ServerSocket(SERVER_PORT);
+    pool = Executors.newFixedThreadPool(POOL_SIZE);
+
+    //esperando una conexion...
+    while(true) {
+      System.out.println("Esperando conexion.........");
+
+      Socket connection = server.accept();
+      System.out.println("Conexion establecida.........");
+      CalculateRequest calcu = new CalculateRequest(connection, pool);
+     
+      pool.execute(calcu);
+
+    }
+    
   }
 }

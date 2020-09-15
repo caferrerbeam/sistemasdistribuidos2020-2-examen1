@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 // TODO: convertir esta clase en un hilo que retorna resultados
-public class CalculatorUtil {
+public class CalculatorUtil implements Runnable{
 
   private String command;
   private double numbers[];
@@ -40,4 +40,9 @@ public class CalculatorUtil {
     }
     throw new RuntimeException("Operation not implemented");
   }
+
+    @Override
+    public void run() {
+        execute();
+    }
 }
