@@ -2,6 +2,11 @@ package co.edu.eam.sd.examen1.serverside.main;
 
 import co.edu.eam.sd.examen1.serverside.utils.Utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,14 +17,14 @@ import java.util.concurrent.Future;
 
 //TODO: clase que esperara las solicitudes de conexion de los nodos de calculo
 // las solicitudes se esperan concurrentemente pero no se procesan concurrentemente
-public class Calculator {
+public class Calculator implements Runnable{
   public static final int BLOCK_SIZE = 1000;
   public static int PORT = 50000;
 
   private Map<String, Map<String, String>> nodesConfigurations = new HashMap<>();
 
   //TODO: crear el pool de hilos. 100 hilos maximo
-  private ExecutorService pool = null;
+  private ExecutorService pool = Executors.newFixedThreadPool(100);
 
   public double process(double[] numbers, String command) throws Exception {
     int blockCount = numbers.length / BLOCK_SIZE;
@@ -34,6 +39,8 @@ public class Calculator {
       double block[] = Utils.getBlock(numbers, i, BLOCK_SIZE);
       CalculatorRequester calculatorRequester = new CalculatorRequester(block, getNode(), command);
       //TODO: agendar el procesamiento del bloque y agregar al arreglo de futuros
+      Future<Double> futuro = pool.submit(calculatorRequester);
+      resultsNodes.add(futuro);
 
     }
 
@@ -43,8 +50,9 @@ public class Calculator {
     //TODO: obtener todos los resultados futuros y llenar el arreglo de nums con esos resultados.
     // tip: el Future retorna Double, se puede obtener el valor primitivo con .doubleValue()
     for (Future<Double> future : resultsNodes) {
-      nums[i++] = 0;// TODO: obtener futuro...
-    }
+      // TODO: obtener futuro...
+      nums[i] = future.get().doubleValue();
+      i++;    }
 
     //Aqui se sumariza los calculos que se hicieron concurrentemente.
     return new CalculatorRequester(nums, getNode(), command).execute();
@@ -73,6 +81,7 @@ public class Calculator {
     nodesConfigurations.put(nodeName, config);
   }
 
+
   //TODO: en vista que no hay muchos nodos el metodo concurrente de esta clase aceptara las peticiones
   //  pero su procesamiento no sera concurrentemente.
   // cuando llega una solicitud de un nodo de calculo se hace lo siguiente
@@ -84,5 +93,22 @@ public class Calculator {
   //  6. desconectarse
   //  7. invocar metodo registerWorkerNode(String ip, int port, String nodeName)
   // EL METODO DEL HILOOOOOOOOOOO
-
+  @Override
+  public void run() {
+	  // TODO Auto-generated method stub
+	  try {
+		ServerSocket serverSocket = new ServerSocket(PORT);
+		Socket conexion = serverSocket.accept();
+		BufferedReader entrada = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+		String comando = entrada.readLine().toLowerCase();
+		String ip = "";
+		int port = 0;
+		String nodeName = "";
+		serverSocket.close();
+		registerWorkerNode(ip, port, nodeName);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+  }
 }
