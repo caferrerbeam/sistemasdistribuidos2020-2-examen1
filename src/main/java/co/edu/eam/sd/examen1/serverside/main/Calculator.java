@@ -101,24 +101,19 @@ public class Calculator implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		ServerSocket server;
 		try {
-			server = new ServerSocket();
+			ServerSocket server = new ServerSocket(PORT);
 			Socket connection = server.accept();
 			BufferedReader entrada = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String comando = entrada.readLine().toLowerCase();
-			System.out.println(comando);
-			String ip = "";
-			int puerto = 0;
-			String name = "";
+			String command = entrada.readLine().toLowerCase();
+			System.out.println(command);
 			connection.close();
-			registerWorkerNode(ip, puerto, name);
+			registerWorkerNode("localhost", PORT, "");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 }

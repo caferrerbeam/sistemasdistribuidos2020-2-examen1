@@ -42,8 +42,8 @@ public class CalculatorRequester implements Callable<Double> {
 	// 3. recibir la respuesta (resutlado del calculo)
 	// 4. retornar dicho resultado
 	private double sendCommandToWorker(String ip, int port, String command, String payload) throws IOException {
-		Socket conexion = new Socket(ip, port);
-		PrintStream salida = new PrintStream(conexion.getOutputStream());
+		Socket connection = new Socket(ip, port);
+		PrintStream salida = new PrintStream(connection.getOutputStream());
 		salida.write(command.getBytes());
 		salida.write(payload.getBytes());
 		return 0;

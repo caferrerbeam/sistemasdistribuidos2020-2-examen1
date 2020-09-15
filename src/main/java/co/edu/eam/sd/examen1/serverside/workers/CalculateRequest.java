@@ -87,9 +87,9 @@ public class CalculateRequest implements Runnable {
 		try {
 			BufferedReader entrada = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			PrintStream salida = new PrintStream(connection.getOutputStream());
-			String comando = entrada.readLine();
-			String payload = "";
-			salida.write((executeCommand(comando, payload) + "").getBytes());
+			String command = entrada.readLine();
+			String payload = entrada.readLine();
+			salida.write((executeCommand(command, payload) + "").getBytes());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

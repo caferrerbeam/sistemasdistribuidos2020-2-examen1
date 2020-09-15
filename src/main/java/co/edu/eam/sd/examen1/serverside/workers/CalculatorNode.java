@@ -54,13 +54,13 @@ public class CalculatorNode implements Runnable {
 	// 6. desconectarse
 	public void notifyToCentralServer(String ipMaster, int portMaster, String myName, int myPort) throws Exception {
 		String miIp = "localhost"; // por el momento....
-		Socket conexion = new Socket(ipMaster, portMaster);
-		PrintStream salida = new PrintStream(conexion.getOutputStream());
+		Socket connection = new Socket(ipMaster, portMaster);
+		PrintStream salida = new PrintStream(connection.getOutputStream());
 		salida.write("acceptme".getBytes());
 		salida.write(miIp.getBytes());
 		salida.write((myPort + "").getBytes());
 		salida.write(myName.getBytes());
-		conexion.close();
+		connection.close();
 	}
 
 }
