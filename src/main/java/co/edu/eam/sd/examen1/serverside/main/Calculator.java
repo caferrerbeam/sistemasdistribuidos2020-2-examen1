@@ -2,6 +2,11 @@ package co.edu.eam.sd.examen1.serverside.main;
 
 import co.edu.eam.sd.examen1.serverside.utils.Utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,14 +17,14 @@ import java.util.concurrent.Future;
 
 //TODO: clase que esperara las solicitudes de conexion de los nodos de calculo
 // las solicitudes se esperan concurrentemente pero no se procesan concurrentemente
-public class Calculator {
+public class Calculator implements Runnable{
   public static final int BLOCK_SIZE = 1000;
   public static int PORT = 50000;
 
   private Map<String, Map<String, String>> nodesConfigurations = new HashMap<>();
 
   //TODO: crear el pool de hilos. 100 hilos maximo
-  private ExecutorService pool = null;
+  private ExecutorService pool = Executors.newFixedThreadPool(100);
 
   public double process(double[] numbers, String command) throws Exception {
     int blockCount = numbers.length / BLOCK_SIZE;
@@ -34,7 +39,8 @@ public class Calculator {
       double block[] = Utils.getBlock(numbers, i, BLOCK_SIZE);
       CalculatorRequester calculatorRequester = new CalculatorRequester(block, getNode(), command);
       //TODO: agendar el procesamiento del bloque y agregar al arreglo de futuros
-
+     Future<Double> futuo  = pool.submit(calculatorRequester);
+     resultsNodes.add(futuo);
     }
 
     double nums[] = new double[resultsNodes.size()];
@@ -43,7 +49,7 @@ public class Calculator {
     //TODO: obtener todos los resultados futuros y llenar el arreglo de nums con esos resultados.
     // tip: el Future retorna Double, se puede obtener el valor primitivo con .doubleValue()
     for (Future<Double> future : resultsNodes) {
-      nums[i++] = 0;// TODO: obtener futuro...
+      nums[i++] = future.get().doubleValue();// TODO: obtener futuro...
     }
 
     //Aqui se sumariza los calculos que se hicieron concurrentemente.
@@ -84,5 +90,35 @@ public class Calculator {
   //  6. desconectarse
   //  7. invocar metodo registerWorkerNode(String ip, int port, String nodeName)
   // EL METODO DEL HILOOOOOOOOOOO
+  public void run(){
 
+    try {
+      System.out.println("ESPERANDO LOS NODOS.......");
+      ServerSocket serverSocket = new ServerSocket(50000);
+
+      while(true) {
+        Socket conexion = serverSocket.accept();
+        System.out.println("SOLICITUD DE  LOS NODOS.......");
+
+        BufferedReader entrada = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+
+        String orden = entrada.readLine();
+        System.out.println("SOLICITUD DE  LOS NODOS......." + orden);
+
+        if(orden.equalsIgnoreCase("acceptme")){
+          String ip =entrada.readLine();
+          int port = Integer.valueOf(entrada.readLine());
+          String nodeName =entrada.readLine();
+          registerWorkerNode(ip, port, nodeName);
+        }
+
+        conexion.close();
+      }
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+
+  }
 }

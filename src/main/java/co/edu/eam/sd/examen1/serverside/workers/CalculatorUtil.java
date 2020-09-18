@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 // TODO: convertir esta clase en un hilo que retorna resultados
-public class CalculatorUtil {
+public class CalculatorUtil implements Callable<Double> {
 
   private String command;
   private double numbers[];
@@ -30,6 +30,11 @@ public class CalculatorUtil {
   }
 
   //TODO: este metodo es el que se debe llamar para hacer el calculo concurrente.
+  @Override
+  public Double call() throws Exception {
+    return execute();
+  }
+
   public double execute(){
     System.out.println("Executing "+ command + "with numbers" + Arrays.toString(numbers));
 

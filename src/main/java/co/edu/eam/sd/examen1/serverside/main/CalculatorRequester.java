@@ -3,11 +3,17 @@ package co.edu.eam.sd.examen1.serverside.main;
 
 import co.edu.eam.sd.examen1.serverside.utils.Utils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 //TODO: implementar esta clase como un Hilo que retorna un resultado y ejecutar
-public class CalculatorRequester {
+public class CalculatorRequester implements Callable<Double> {
 
   private double[] numbers;
   private Map<String, String> node;
@@ -39,8 +45,28 @@ public class CalculatorRequester {
   //  3. recibir la respuesta (resutlado del calculo)
   //  4. retornar dicho resultado
   private double sendCommandToWorker(String ip, int port, String command, String payload) throws IOException {
-    return 0;
+
+    Socket conexion = new Socket(ip, port);
+    PrintStream salida = new PrintStream(conexion.getOutputStream());
+    BufferedReader entrada = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+
+    salida.println(command);
+    salida.println(payload);
+
+    System.out.println("caomando en NODO de calculo:" +command +","+ payload);
+
+    double calculo = Double.valueOf(entrada.readLine());
+    System.out.println("resultad en MASTEr de calculo:" +calculo);
+
+
+    conexion.close();
+    return calculo;
   }
+
   //TODO implementar metodo concurrente cuyo trabajo es invocar a execute solamente.
+  @Override
+  public Double call() throws Exception {
+    return execute();
+  }
 
 }
